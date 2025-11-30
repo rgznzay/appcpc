@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Salud Casa por Casa </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --verde-fondo: #0f3c34;
+      --verde-oscuro: #08241f;
+      --dorado: #cba24a;
+      --vino: #7a1433;
+      --bg: #f4f4f4;
+      --card-bg: #ffffff;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --danger: #b91c1c;
+      --success: #15803d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--verde-fondo), var(--verde-oscuro));
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .logo-principal {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .logo-imss {
+      height: 32px;
+      object-fit: contain;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    header small {
+      display: block;
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 1.5rem auto 4.5rem; /* espacio extra por la barra inferior */
+      padding: 0 1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.09);
+      border-top: 4px solid var(--dorado);
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--verde-oscuro);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      margin-top: 1.1rem;
+      font-size: 0.98rem;
+      color: var(--vino);
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.1rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(203, 162, 74, 0.12);
+      color: var(--dorado);
+      border: 1px solid rgba(203, 162, 74, 0.6);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      border: none;
+      background: var(--vino);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.05s ease, box-shadow 0.1s ease, background 0.1s ease;
+    }
+
+    .btn:hover {
+      background: #5a0f25;
+      box-shadow: 0 6px 14px rgba(122, 20, 51, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .muted {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pill {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #e5e7eb;
+      color: var(--muted);
+    }
+
+    .role-buttons {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .role-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .role-card {
+      border-radius: 0.75rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .role-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--verde-oscuro);
+    }
+
+    .role-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    th, td {
+      padding: 0.45rem 0.4rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    th {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      background: #f3f4f6;
+    }
+
+    tr:hover td {
+      background: #f9fafb;
+    }
+
+    .tag-normal {
+      background: rgba(21, 128, 61, 0.1);
+      color: var(--success);
+      border-radius: 999px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .tag-alerta {
+      background: rgba(185, 28, 28, 0.08);
+      color: var(--danger);
+      border-radius: 999px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    form {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--verde-oscuro);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.45rem 0.5rem;
+      border-radius: 0.4rem;
+      border: 1px solid #d1d5db;
+      font-size: 0.86rem;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .voice-wrapper {
+      display: flex;
+      gap: 0.4rem;
+      align-items: flex-start;
+    }
+
+    .btn-voice {
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .btn-voice.active {
+      border-color: var(--vino);
+      color: var(--vino);
+      background: #fef3f7;
+    }
+
+    .voice-icon { font-size: 1rem; }
+
+    .checkbox-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.82rem;
+    }
+
+    .checkbox-row label {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .filters > div {
+      min-width: 140px;
+      flex: 1;
+    }
+
+    .stats {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .stat-card {
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.75rem;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      font-size: 0.82rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--verde-oscuro);
+    }
+
+    .back-link {
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--vino);
+      cursor: pointer;
+    }
+
+    .link {
+      color: var(--vino);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .link:hover { text-decoration: underline; }
+
+    .empty-state {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 0.5rem;
+    }
+
+    .footer-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+    }
+
+    .glucose-bars {
+      margin-top: 0.6rem;
+      border-radius: 0.75rem;
+      border: 1px dashed #d1d5db;
+      padding: 0.75rem;
+      background: #f9fafb;
+    }
+
+    .glucose-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.8rem;
+    }
+
+    .glucose-bar {
+      flex: 1;
+      height: 9px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .glucose-bar-inner {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--dorado);
+    }
+
+    .sensor-mode {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sensor-mode label {
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* LOGIN */
+    .login-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .login-logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    .login-card {
+      max-width: 400px;
+      width: 100%;
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 12px 25px rgba(15, 23, 42, 0.18);
+      border-top: 4px solid var(--vino);
+    }
+
+    .login-card h2 {
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 0.5rem;
+      z-index: 20;
+    }
+
+    .bottom-nav button {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 0.2rem 0.3rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+      cursor: pointer;
+    }
+
+    .bottom-nav button span.icon {
+      font-size: 1.1rem;
+    }
+
+    .bottom-nav button.active {
+      color: var(--vino);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <!-- AQUÍ PONES TUS LOGOS REALES -->
+      <img src="logo_salud_verde.png" alt="Logo programa" class="logo-principal" />
+      <img src="logo_imss.png" alt="Logo IMSS" class="logo-imss" />
+      <div>
+        <h1>Salud Casa por Casa</h1>
+        <small></small>
+      </div>
+    </div>
+
+    <button class="btn btn-outline btn-sm" type="button" onclick="showView('view-login');hideBottomNav();">
+      Cerrar sesión
+    </button>
+  </header>
+
+  <main>
+    <!-- LOGIN -->
+    <section id="view-login" class="card">
+      <div class="login-wrapper">
+        <!--  -->
+        <img src="logo_salud.png" alt="Logo Salud casa por casa asdfghj" class="login-logo" />
+        <div class="login-card">
+          <h2>Iniciar sesión</h2>
+          <p class="login-subtitle">
+            Acceso
+          </p>
+          <form id="login-form">
+            <div style="margin-bottom:0.7rem;">
+              <label for="login-user">Usuario</label>
+              <input id="login-user" placeholder="Usuario" />
+            </div>
+            <div style="margin-bottom:0.9rem;">
+              <label for="login-pass">Contraseña</label>
+              <input id="login-pass" type="password" placeholder="Ingresa tu contraseña" />
+            </div>
+            <button class="btn" type="submit" style="width:100%; justify-content:center;">
+              Ingresar
+            </button>
+            <p class="footer-note" style="text-align:center; margin-top:0.8rem;">
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Selección de rol -->
+    <section id="view-role" class="card" style="display:none;">
+      <div class="section-header">
+        <h2>Selecciona el modo de uso <span class="badge">Simulación</span></h2>
+        <span class="pill">Versión 0.1(no oficial)</span>
+      </div>
+      <p class="muted">
+      </p>
+
+      <div class="role-buttons">
+        <div class="role-card">
+          <div class="role-title">Enfermero</div>
+          <div class="role-desc">
+            Captura nota clínica domiciliaria, signos vitales y motivo de la atención.
+          </div>
+          <button class="btn" type="button" onclick="enterAs('enfermero')">
+            Personal de la Salud
+          </button>
+        </div>
+        <div class="role-card">
+          <div class="role-title">Visualizacion</div>
+          <div class="role-desc">
+            Consulta notas registradas, pacientes en alerta y detalles por derechohabiente.
+          </div>
+          <button class="btn" type="button" onclick="enterAs('medico')">
+            Personal de la Salud
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard enfermería -->
+    <section id="view-nurse-dashboard" class="card" style="display:none;">
+      <div class="section-header">
+        <h2>Listado de notas del día <span class="badge">Visitas domiciliarias</span></h2>
+        <button class="btn btn-sm" type="button" onclick="showView('view-visit-form');setActiveTab('programar');">
+          + Nueva nota
+        </button>
+      </div>
+      <p class="muted">
+        Registro de visitas del cuadernillo. Cada fila representa una visita domiciliaria.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Visita</th>
+            <th>Derechohabiente</th>
+            <th>Localidad</th>
+            <th>TA / Glucosa</th>
+            <th>Riesgo</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody id="nurse-visits-body"></tbody>
+      </table>
+      <p id="nurse-empty" class="empty-state" style="display:none;">
+        No hay notas registradas hoy.
+      </p>
+    </section>
+
+    <!-- Formulario: nota clínica domiciliaria -->
+    <section id="view-visit-form" class="card" style="display:none;">
+      <div class="back-link" onclick="fromFormBack()">
+        ← Volver al listado
+      </div>
+      <h2>Nota clínica domiciliaria</h2>
+      <p class="muted">
+        Ficha de identificación, tipo de visita, signos vitales y secciones de texto libre con opción de voz.
+      </p>
+
+      <form id="visit-form">
+        <!-- 1. DATOS DEL DERECHOHABIENTE -->
+        <h3>1. Ficha de identificación</h3>
+        <div class="form-grid form-grid-2">
+          <div>
+            <label for="nombre">Nombre del derechohabiente *</label>
+            <input id="nombre" required />
+          </div>
+          <div>
+            <label for="edad">Edad *</label>
+            <input id="edad" type="number" min="0" required />
+          </div>
+          <div>
+            <label for="sexo">Sexo *</label>
+            <select id="sexo" required>
+              <option value="">Seleccione…</option>
+              <option value="F">Femenino</option>
+              <option value="M">Masculino</option>
+              <option value="O">Otro</option>
+            </select>
+          </div>
+          <div>
+            <label for="curp">CURP (opcional)</label>
+            <input id="curp" />
+          </div>
+          <div>
+            <label for="localidad">Localidad / colonia *</label>
+            <input id="localidad" required />
+          </div>
+          <div>
+            <label for="folio">Folio (simulado)</label>
+            <input id="folio" />
+          </div>
+        </div>
+
+        <!-- Tipo de visita -->
+        <div class="form-grid form-grid-2">
+          <div>
+            <label for="tipo-visita">Tipo de visita</label>
+            <select id="tipo-visita">
+              <option value="">Seleccione…</option>
+              <option value="Primera">Primera visita</option>
+              <option value="Segunda">Segunda visita</option>
+              <option value="Tercera">Tercera visita</option>
+              <option value="Cuarta">Cuarta visita</option>
+              <option value="Quinta">Quinta visita</option>
+              <option value="Sexta">Sexta visita</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 2. SIGNOS VITALES + SENSOR -->
+        <h3>2. Signos vitales</h3>
+
+        <div class="sensor-mode">
+          <span style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--verde-oscuro);">
+            Modo de captura:
+          </span>
+          <label><input type="radio" name="modo-sensor" value="manual" checked /> Manual </label>
+          <label><input type="radio" name="modo-sensor" value="sensor" /> Sensado en tiempo real (simulado)</label>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="simularSensor()">
+            Simular lectura de sensor
+          </button>
+        </div>
+
+        <div class="form-grid form-grid-2">
+          <div>
+            <label for="tas">Tensión arterial sistólica (mmHg)</label>
+            <input id="tas" type="number" min="0" />
+          </div>
+          <div>
+            <label for="tad">Tensión arterial diastólica (mmHg)</label>
+            <input id="tad" type="number" min="0" />
+          </div>
+          <div>
+            <label for="fc">Frecuencia cardiaca (lpm)</label>
+            <input id="fc" type="number" min="0" />
+          </div>
+          <div>
+            <label for="fr">Frecuencia respiratoria (rpm)</label>
+            <input id="fr" type="number" min="0" />
+          </div>
+          <div>
+            <label for="temp">Temperatura (°C)</label>
+            <input id="temp" type="number" step="0.1" />
+          </div>
+          <div>
+            <label for="glucosa">Glucemia capilar (mg/dL)</label>
+            <input id="glucosa" type="number" min="0" />
+          </div>
+          <div>
+            <label for="spo2">Saturación O₂ (%)</label>
+            <input id="spo2" type="number" min="0" max="100" />
+          </div>
+        </div>
+
+        <!-- 3. MOTIVO (TEXTO + VOZ) -->
+        <h3>3. Motivo de la atención (texto o voz)</h3>
+        <div class="voice-wrapper">
+          <div style="flex:1;">
+            <label for="motivo">Motivo de la atención / interrogatorio</label>
+            <textarea id="motivo" placeholder="Ej. control de DM2, descompensación, dolor, caída, etc."></textarea>
+          </div>
+          <button class="btn-voice" type="button" id="btn-voice-motivo" onclick="startDictation('motivo', this)">
+            <span class="voice-icon">🎙</span>
+            <span>Usar voz</span>
+          </button>
+        </div>
+
+        <!-- 4. ANTECEDENTES -->
+        <h3>4. Antecedentes relevantes</h3>
+        <div class="checkbox-row">
+          <label><input type="checkbox" id="ante-diabetes" /> Diabetes</label>
+          <label><input type="checkbox" id="ante-hta" /> Hipertensión</label>
+          <label><input type="checkbox" id="ante-emb" /> Embarazo</label>
+          <label><input type="checkbox" id="ante-epoc" /> EPOC</label>
+          <label><input type="checkbox" id="ante-otro" /> Otro</label>
+        </div>
+
+        <!-- 5. EXPLORACIÓN (TEXTO + VOZ) -->
+        <h3>5. Observaciones / exploración física</h3>
+        <div class="voice-wrapper">
+          <div style="flex:1;">
+            <label for="exploracion">Exploración física y observaciones</label>
+            <textarea id="exploracion" placeholder="Ej. TA controlada, orientado, marcha estable, signos de deshidratación, etc."></textarea>
+          </div>
+          <button class="btn-voice" type="button" id="btn-voice-expl" onclick="startDictation('exploracion', this)">
+            <span class="voice-icon">🎙</span>
+            <span>Usar voz</span>
+          </button>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.75rem;">
+          <button class="btn" type="submit">Guardar nota</button>
+          <button class="btn btn-secondary" type="button" onclick="fromFormBack()">Cancelar</button>
+        </div>
+
+        <p class="footer-note">
+        </p>
+      </form>
+    </section>
+
+    <!-- Dashboard médico -->
+    <section id="view-doctor-dashboard" class="card" style="display:none;">
+      <div class="section-header">
+        <h2>Resumen de notas clínicas</h2>
+        <span class="pill">Vista coordinación médica</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">Notas totales</div>
+          <div id="stat-total" class="stat-value">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Notas del día</div>
+          <div id="stat-hoy" class="stat-value">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pacientes en alerta</div>
+          <div id="stat-alerta" class="stat-value">0</div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div>
+          <label for="filtro-fecha">Fecha</label>
+          <input id="filtro-fecha" type="date" onchange="renderDoctorTable()" />
+        </div>
+        <div>
+          <label for="filtro-localidad">Localidad</label>
+          <input id="filtro-localidad" type="text" oninput="renderDoctorTable()" />
+        </div>
+        <div>
+          <label for="filtro-riesgo">Riesgo</label>
+          <select id="filtro-riesgo" onchange="renderDoctorTable()">
+            <option value="todos">Todos</option>
+            <option value="Normal">Normal</option>
+            <option value="Alerta">Alerta</option>
+          </select>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Derechohabiente</th>
+            <th>Localidad</th>
+            <th>TA</th>
+            <th>Glucosa</th>
+            <th>Riesgo</th>
+          </tr>
+        </thead>
+        <tbody id="doctor-visits-body"></tbody>
+      </table>
+      <p id="doctor-empty" class="empty-state" style="display:none;">
+        No hay notas registradas.
+      </p>
+    </section>
+
+    <!-- Detalle de paciente -->
+    <section id="view-patient-detail" class="card" style="display:none;">
+      <div class="back-link" onclick="backFromDetail()">
+        ← Volver al resumen
+      </div>
+      <h2>Detalle del derechohabiente</h2>
+      <div id="patient-info" class="muted"></div>
+
+      <h3>Historial de notas clínicas</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>TA</th>
+            <th>Glucosa</th>
+            <th>Motivo</th>
+            <th>Riesgo</th>
+          </tr>
+        </thead>
+        <tbody id="patient-visits-body"></tbody>
+      </table>
+
+      <div class="glucose-bars">
+        <strong>Tendencia de glucosa (mg/dL)</strong>
+        <div id="glucose-bars-container"></div>
+        <p class="footer-note">
+        </p>
+      </div>
+    </section>
+
+    <!-- Sincronización (simulada) -->
+    <section id="view-sync" class="card" style="display:none;">
+      <h2>Sincronizar datos</h2>
+      <p class="muted">
+      </p>
+      <button class="btn" type="button" onclick="syncNow()">Iniciar sincronización</button>
+      <p id="sync-status" class="footer-note" style="margin-top:0.8rem;"></p>
+    </section>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottom-nav" style="display:none;">
+    <button id="tab-inicio" onclick="goTab('inicio')">
+      <span class="icon">🏠</span>
+      <span>Inicio</span>
+    </button>
+    <button id="tab-programar" onclick="goTab('programar')">
+      <span class="icon">📅</span>
+      <span>Programar</span>
+    </button>
+    <button id="tab-visitar" onclick="goTab('visitar')">
+      <span class="icon">✅</span>
+      <span>Visitar</span>
+    </button>
+    <button id="tab-sync" onclick="goTab('sincronizar')">
+      <span class="icon">🔄</span>
+      <span>Sincronizar</span>
+    </button>
+  </nav>
+
+  <script>
+    let visits = [];
+    let currentRole = null;
+    let currentPatientKey = null;
+    let currentTab = "inicio";
+
+    let recognition = null;
+    let recognizing = false;
+    let currentTarget = null;
+    let currentButton = null;
+
+    function todayStr() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function computeRisk(glucosa, tas) {
+      const g = Number(glucosa);
+      const s = Number(tas);
+      if ((g && g > 180) || (s && s > 140)) return "Alerta";
+      return "Normal";
+    }
+
+    function showView(id) {
+      const views = [
+        "view-login",
+        "view-role",
+        "view-nurse-dashboard",
+        "view-visit-form",
+        "view-doctor-dashboard",
+        "view-patient-detail",
+        "view-sync"
+      ];
+      views.forEach(v => {
+        document.getElementById(v).style.display = v === id ? "block" : "none";
+      });
+    }
+
+    function showBottomNav() {
+      document.getElementById("bottom-nav").style.display = "flex";
+    }
+
+    function hideBottomNav() {
+      document.getElementById("bottom-nav").style.display = "none";
+    }
+
+    function setActiveTab(tab) {
+      currentTab = tab;
+      ["inicio","programar","visitar","sincronizar"].forEach(t => {
+        const btn = document.getElementById("tab-" + t);
+        if (btn) btn.classList.toggle("active", t === tab);
+      });
+    }
+
+    function goTab(tab) {
+      setActiveTab(tab);
+
+      if (tab === "inicio") {
+        if (!currentRole) {
+          showView("view-role");
+        } else if (currentRole === "enfermero") {
+          showView("view-nurse-dashboard");
+          renderNurseTable();
+        } else {
+          showView("view-doctor-dashboard");
+          renderDoctorTable();
+        }
+      } else if (tab === "programar") {
+        showView("view-visit-form");
+      } else if (tab === "visitar") {
+        if (currentRole === "medico") {
+          showView("view-doctor-dashboard");
+          renderDoctorTable();
+        } else {
+          showView("view-nurse-dashboard");
+          renderNurseTable();
+        }
+      } else if (tab === "sincronizar") {
+        showView("view-sync");
+      }
+    }
+
+    function enterAs(role) {
+      currentRole = role;
+      showBottomNav();
+      if (role === "enfermero") {
+        goTab("visitar");
+      } else {
+        goTab("visitar");
+      }
+    }
+
+    function fromFormBack() {
+      if (currentRole === "medico") {
+        goTab("visitar");
+      } else {
+        goTab("visitar");
+      }
+    }
+
+    function backFromDetail() {
+      goTab("visitar");
+    }
+
+    function renderNurseTable() {
+      const tbody = document.getElementById("nurse-visits-body");
+      const empty = document.getElementById("nurse-empty");
+      tbody.innerHTML = "";
+
+      const today = todayStr();
+      const todayVisits = visits.filter(v => v.date === today);
+
+      if (todayVisits.length === 0) {
+        empty.style.display = "block";
+        return;
+      }
+      empty.style.display = "none";
+
+      todayVisits.forEach(v => {
+        const tr = document.createElement("tr");
+        const key = makePatientKey(v);
+        const ta = v.vitals.tas && v.vitals.tad ? `${v.vitals.tas}/${v.vitals.tad}` : "";
+        const glu = v.vitals.glucose || "";
+        const tagClass = v.risk === "Alerta" ? "tag-alerta" : "tag-normal";
+
+        tr.innerHTML = `
+          <td>${v.date}</td>
+          <td>${v.tipoVisita || ""}</td>
+          <td>${v.patient.name}</td>
+          <td>${v.patient.location || ""}</td>
+          <td>${ta} · ${glu}</td>
+          <td><span class="${tagClass}">${v.risk}</span></td>
+          <td><a href="#" class="link" onclick="openPatientDetail('${key}');return false;">Ver</a></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderDoctorTable() {
+      const tbody = document.getElementById("doctor-visits-body");
+      const empty = document.getElementById("doctor-empty");
+      tbody.innerHTML = "";
+
+      const filtroFecha = document.getElementById("filtro-fecha").value;
+      const filtroLoc = document.getElementById("filtro-localidad").value.trim().toLowerCase();
+      const filtroRiesgo = document.getElementById("filtro-riesgo").value;
+
+      let filtered = [...visits];
+      if (filtroFecha) filtered = filtered.filter(v => v.date === filtroFecha);
+      if (filtroLoc) {
+        filtered = filtered.filter(v =>
+          (v.patient.location || "").toLowerCase().includes(filtroLoc)
+        );
+      }
+      if (filtroRiesgo !== "todos") {
+        filtered = filtered.filter(v => v.risk === filtroRiesgo);
+      }
+
+      if (filtered.length === 0) {
+        empty.style.display = "block";
+      } else {
+        empty.style.display = "none";
+      }
+
+      filtered.forEach(v => {
+        const tr = document.createElement("tr");
+        const key = makePatientKey(v);
+        const ta = v.vitals.tas && v.vitals.tad ? `${v.vitals.tas}/${v.vitals.tad}` : "";
+        const glu = v.vitals.glucose || "";
+        const tagClass = v.risk === "Alerta" ? "tag-alerta" : "tag-normal";
+
+        tr.innerHTML = `
+          <td>${v.date}</td>
+          <td><a href="#" class="link" onclick="openPatientDetail('${key}');return false;">${v.patient.name}</a></td>
+          <td>${v.patient.location || ""}</td>
+          <td>${ta}</td>
+          <td>${glu}</td>
+          <td><span class="${tagClass}">${v.risk}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const statTotal = document.getElementById("stat-total");
+      const statHoy = document.getElementById("stat-hoy");
+      const statAlerta = document.getElementById("stat-alerta");
+
+      const today = todayStr();
+      const visitasHoy = visits.filter(v => v.date === today);
+      const alerta = visits.filter(v => v.risk === "Alerta");
+
+      statTotal.textContent = visits.length;
+      statHoy.textContent = visitasHoy.length;
+      statAlerta.textContent = alerta.length;
+    }
+
+    function makePatientKey(v) {
+      const curp = (v.patient.curp || "").toUpperCase();
+      return (v.patient.name + "|" + curp).toUpperCase();
+    }
+
+    function openPatientDetail(key) {
+      currentPatientKey = key;
+      showView("view-patient-detail");
+
+      const patientVisits = visits.filter(v => makePatientKey(v) === key);
+      if (patientVisits.length === 0) return;
+
+      const p = patientVisits[0].patient;
+      document.getElementById("patient-info").textContent =
+        `${p.name} · ${p.age} años · ${p.sex || ""} · ${p.location || ""}` +
+        (p.curp ? ` · CURP: ${p.curp}` : "");
+
+      const tbody = document.getElementById("patient-visits-body");
+      tbody.innerHTML = "";
+      patientVisits.forEach(v => {
+        const ta = v.vitals.tas && v.vitals.tad ? `${v.vitals.tas}/${v.vitals.tad}` : "";
+        const glu = v.vitals.glucose || "";
+        const tagClass = v.risk === "Alerta" ? "tag-alerta" : "tag-normal";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${v.date}</td>
+          <td>${ta}</td>
+          <td>${glu}</td>
+          <td>${v.motivo || ""}</td>
+          <td><span class="${tagClass}">${v.risk}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      renderGlucoseBars(patientVisits);
+    }
+
+    function renderGlucoseBars(patientVisits) {
+      const container = document.getElementById("glucose-bars-container");
+      container.innerHTML = "";
+
+      const withGlucose = patientVisits.filter(v => v.vitals.glucose);
+      if (withGlucose.length === 0) {
+        container.innerHTML = '<p class="empty-state">Sin registros de glucosa.</p>';
+        return;
+      }
+
+      const maxG = Math.max(...withGlucose.map(v => Number(v.vitals.glucose)));
+
+      withGlucose.forEach(v => {
+        const row = document.createElement("div");
+        row.className = "glucose-bar-row";
+
+        const label = document.createElement("div");
+        label.textContent = `${v.date} · ${v.vitals.glucose} mg/dL`;
+
+        const bar = document.createElement("div");
+        bar.className = "glucose-bar";
+
+        const inner = document.createElement("div");
+        inner.className = "glucose-bar-inner";
+        inner.style.width = Math.min((Number(v.vitals.glucose) / maxG) * 100, 100) + "%";
+
+        bar.appendChild(inner);
+        row.appendChild(label);
+        row.appendChild(bar);
+        container.appendChild(row);
+      });
+    }
+
+    document.getElementById("visit-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const edad = Number(document.getElementById("edad").value);
+      const sexo = document.getElementById("sexo").value;
+      const curp = document.getElementById("curp").value.trim();
+      const localidad = document.getElementById("localidad").value.trim();
+      const folio = document.getElementById("folio").value.trim();
+      const tipoVisita = document.getElementById("tipo-visita").value;
+
+      if (!nombre || !edad || edad <= 0 || !sexo || !localidad) {
+        alert("Completa nombre, edad (>0), sexo y localidad.");
+        return;
+      }
+
+      const tas = document.getElementById("tas").value;
+      const tad = document.getElementById("tad").value;
+      const fc = document.getElementById("fc").value;
+      const fr = document.getElementById("fr").value;
+      const temp = document.getElementById("temp").value;
+      const glucosa = document.getElementById("glucosa").value;
+      const spo2 = document.getElementById("spo2").value;
+
+      const motivo = document.getElementById("motivo").value.trim();
+      const exploracion = document.getElementById("exploracion").value.trim();
+
+      const antecedentes = {
+        diabetes: document.getElementById("ante-diabetes").checked,
+        hta: document.getElementById("ante-hta").checked,
+        embarazo: document.getElementById("ante-emb").checked,
+        epoc: document.getElementById("ante-epoc").checked,
+        otro: document.getElementById("ante-otro").checked
+      };
+
+      const risk = computeRisk(glucosa, tas);
+
+      const visit = {
+        id: Date.now(),
+        date: todayStr(),
+        folio,
+        tipoVisita,
+        patient: { name: nombre, age: edad, sex: sexo, curp, location: localidad },
+        vitals: { tas, tad, fc, fr, temp, glucose: glucosa, spo2 },
+        motivo,
+        exploracion,
+        antecedentes,
+        risk
+      };
+
+      visits.push(visit);
+      alert("Nota guardada.");
+      goTab("visitar");
+    });
+
+    function simularSensor() {
+      const modo = document.querySelector("input[name='modo-sensor']:checked").value;
+      if (modo !== "sensor") {
+        alert("Selecciona 'Usar sensor en tiempo real' para simular la lectura.");
+        return;
+      }
+
+      document.getElementById("tas").value = 130 + Math.round(Math.random() * 15);
+      document.getElementById("tad").value = 80 + Math.round(Math.random() * 10);
+      document.getElementById("fc").value = 70 + Math.round(Math.random() * 10);
+      document.getElementById("fr").value = 16 + Math.round(Math.random() * 4);
+      document.getElementById("temp").value = (36.5 + Math.random()).toFixed(1);
+      document.getElementById("glucosa").value = 100 + Math.round(Math.random() * 80);
+      document.getElementById("spo2").value = 94 + Math.round(Math.random() * 5);
+    }
+
+    function initRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Este navegador no soporta dictado por voz (Chrome/Edge suelen funcionar).");
+        return null;
+      }
+      const rec = new SpeechRecognition();
+      rec.lang = "es-MX";
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+      return rec;
+    }
+
+    function startDictation(targetId, buttonEl) {
+      if (recognizing) {
+        recognition.stop();
+        return;
+      }
+
+      recognition = initRecognition();
+      if (!recognition) return;
+
+      currentTarget = document.getElementById(targetId);
+      currentButton = buttonEl;
+
+      recognizing = true;
+      buttonEl.classList.add("active");
+      buttonEl.querySelector(".voice-icon").textContent = "🔴";
+      buttonEl.querySelector("span:nth-child(2)").textContent = "Grabando…";
+
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        currentTarget.value = (currentTarget.value + " " + transcript).trim();
+      };
+
+      recognition.onerror = () => {
+        alert("Error al usar el micrófono.");
+      };
+
+      recognition.onend = () => {
+        recognizing = false;
+        if (currentButton) {
+          currentButton.classList.remove("active");
+          currentButton.querySelector(".voice-icon").textContent = "🎙";
+          currentButton.querySelector("span:nth-child(2)").textContent = "Usar voz";
+        }
+      };
+    }
+
+    function syncNow() {
+      const label = document.getElementById("sync-status");
+      label.textContent = "Sincronizando notas…";
+      setTimeout(() => {
+        label.textContent = "Sincronización completada (simulada).";
+      }, 1200);
+    }
+
+    // LOGIN DEMO
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      showBottomNav();
+      setActiveTab("inicio");
+      showView("view-role");
+    });
+
+    // Vista inicial: login
+    showView("view-login");
+  </script>
+</body>
+</html>
