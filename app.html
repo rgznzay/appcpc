@@ -247,21 +247,22 @@
       font-weight: 500;
     }
 
-    form {
-      display: grid;
-      gap: 0.9rem;
-    }
+   .form-grid {
+  display: grid;
+  gap: 0.75rem;
+}
 
-    .form-grid {
-      display: grid;
-      gap: 0.7rem;
-    }
+.form-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 
-    @media (min-width: 640px) {
-      .form-grid-2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
+/* Opcional: en celular que se vea de una sola columna */
+@media (max-width: 768px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
 
     label {
       display: block;
@@ -433,22 +434,6 @@
       background: var(--dorado);
     }
 
-    .sensor-mode {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem 1rem;
-      font-size: 0.8rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .sensor-mode label {
-      text-transform: none;
-      letter-spacing: 0;
-      font-weight: 500;
-      color: var(--text);
-    }
-
     /* LOGIN */
     .login-wrapper {
       display: flex;
@@ -524,6 +509,72 @@
       color: var(--vino);
       font-weight: 600;
     }
+
+    /* TEXTAREA + MIC ADENTRO */
+    .textarea-wrapper {
+      position: relative;
+    }
+
+    .textarea-wrapper textarea {
+      padding-right: 2.5rem;
+    }
+
+    .mic-inside {
+      position: absolute;
+      right: 0.35rem;
+      bottom: 0.35rem;
+      z-index: 1;
+    }
+
+    /* MODAL SENSADO */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px 18px 14px;
+      max-width: 360px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, .35);
+      font-size: 0.75rem;
+    }
+
+    .modal-card h3 {
+      margin: 0 0 6px;
+      font-size: 0.85rem;
+      color: var(--verde-oscuro);
+    }
+
+    .modal-card p {
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 12px;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 0.72rem;
+    }
+
+    .checklist input[type="checkbox"] {
+      accent-color: var(--success);
+    }
   </style>
 </head>
 <body>
@@ -576,15 +627,15 @@
     <!-- Selección de rol -->
     <section id="view-role" class="card" style="display:none;">
       <div class="section-header">
-        <h2>Selecciona el modo de uso <span class="badge">Simulación</span></h2>
-        <span class="pill">Versión 0.1(no oficial)</span>
+        <h2><span class="badge"></span></h2>
+        <span class="pill">Versión 1.0</span>
       </div>
       <p class="muted">
       </p>
 
       <div class="role-buttons">
         <div class="role-card">
-          <div class="role-title">Enfermero</div>
+          <div class="role-title">Consulta</div>
           <div class="role-desc">
             Captura nota clínica domiciliaria, signos vitales y motivo de la atención.
           </div>
@@ -598,7 +649,7 @@
             Consulta notas registradas, pacientes en alerta y detalles por derechohabiente.
           </div>
           <button class="btn" type="button" onclick="enterAs('medico')">
-            Personal de la Salud
+            Iniciar
           </button>
         </div>
       </div>
@@ -640,9 +691,10 @@
       <div class="back-link" onclick="fromFormBack()">
         ← Volver al listado
       </div>
-      <h2>Nota clínica domiciliaria</h2>
+      <h2>Nota clínica</h2>
       <p class="muted">
-        Ficha de identificación, tipo de visita, signos vitales y secciones de texto libre con opción de voz.
+     Con fundamentos en la NOM-004-SSA3-2012 numerales 6.2 PUBLICADA EN EL DIARIO OFICIAL DE LA 
+FEDERACIÓN EL DÍA 15 DE OCTUBRE DE 2012
       </p>
 
       <form id="visit-form">
@@ -667,15 +719,15 @@
             </select>
           </div>
           <div>
-            <label for="curp">CURP (opcional)</label>
+            <label for="curp">CURP</label>
             <input id="curp" />
           </div>
           <div>
-            <label for="localidad">Localidad / colonia *</label>
+            <label for="localidad">Localidad*</label>
             <input id="localidad" required />
           </div>
           <div>
-            <label for="folio">Folio (simulado)</label>
+            <label for="folio">Folio</label>
             <input id="folio" />
           </div>
         </div>
@@ -696,61 +748,67 @@
           </div>
         </div>
 
-        <!-- 2. SIGNOS VITALES + SENSOR -->
-        <h3>2. Signos vitales</h3>
+     <!-- 2. SIGNOS VITALES -->
+<h3>2. Signos vitales</h3>
 
-        <div class="sensor-mode">
-          <span style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--verde-oscuro);">
-            Modo de captura:
-          </span>
-          <label><input type="radio" name="modo-sensor" value="manual" checked /> Manual </label>
-          <label><input type="radio" name="modo-sensor" value="sensor" /> Sensado en tiempo real (simulado)</label>
-          <button type="button" class="btn btn-sm btn-secondary" onclick="simularSensor()">
-            Simular lectura de sensor
-          </button>
-        </div>
+<p class="muted" style="margin-bottom:0.6rem;">
+</p>
 
-        <div class="form-grid form-grid-2">
-          <div>
-            <label for="tas">Tensión arterial sistólica (mmHg)</label>
-            <input id="tas" type="number" min="0" />
-          </div>
-          <div>
-            <label for="tad">Tensión arterial diastólica (mmHg)</label>
-            <input id="tad" type="number" min="0" />
-          </div>
-          <div>
-            <label for="fc">Frecuencia cardiaca (lpm)</label>
-            <input id="fc" type="number" min="0" />
-          </div>
-          <div>
-            <label for="fr">Frecuencia respiratoria (rpm)</label>
-            <input id="fr" type="number" min="0" />
-          </div>
-          <div>
-            <label for="temp">Temperatura (°C)</label>
-            <input id="temp" type="number" step="0.1" />
-          </div>
-          <div>
-            <label for="glucosa">Glucemia capilar (mg/dL)</label>
-            <input id="glucosa" type="number" min="0" />
-          </div>
-          <div>
-            <label for="spo2">Saturación O₂ (%)</label>
-            <input id="spo2" type="number" min="0" max="100" />
-          </div>
-        </div>
+<div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+  <button type="button" class="btn btn-sm btn-secondary" onclick="mostrarManual()">
+    Captura manual
+  </button>
+  <button type="button" class="btn btn-sm" onclick="abrirSensado()">
+    Sensado automático
+  </button>
+</div>
+
+<div id="vitals-manual" class="form-grid form-grid-2">
+  <div>
+    <label for="tas">Tensión arterial sistólica (mmHg)</label>
+    <input id="tas" type="number" min="0" />
+  </div>
+
+  <div>
+    <label for="tad">Tensión arterial diastólica (mmHg)</label>
+    <input id="tad" type="number" min="0" />
+  </div>
+
+  <div>
+    <label for="fc">Frecuencia cardiaca (lpm)</label>
+    <input id="fc" type="number" min="0" />
+  </div>
+
+  <div>
+    <label for="fr">Frecuencia respiratoria (rpm)</label>
+    <input id="fr" type="number" min="0" />
+  </div>
+
+  <div>
+    <label for="temp">Temperatura (°C)</label>
+    <input id="temp" type="number" step="0.1" />
+  </div>
+
+  <div>
+    <label for="glucosa">Glucemia capilar (mg/dL)</label>
+    <input id="glucosa" type="number" min="0" />
+  </div>
+
+  <div>
+    <label for="spo2">Saturación O₂ (%)</label>
+    <input id="spo2" type="number" min="0" max="100" />
+  </div>
+</div> <!-- cierre de vitals-manual -->
+
 
         <!-- 3. MOTIVO (TEXTO + VOZ) -->
-        <h3>3. Motivo de la atención (texto o voz)</h3>
-        <div class="voice-wrapper">
-          <div style="flex:1;">
-            <label for="motivo">Motivo de la atención / interrogatorio</label>
-            <textarea id="motivo" placeholder="Ej. control de DM2, descompensación, dolor, caída, etc."></textarea>
-          </div>
-          <button class="btn-voice" type="button" id="btn-voice-motivo" onclick="startDictation('motivo', this)">
+        <h3>3.Motivo de la consulta </h3>
+        <label for="motivo">Resumen del interrogatorio, exploracion fisica</label>
+        <div class="textarea-wrapper">
+          <textarea id="motivo" placeholder=></textarea>
+          <button class="btn-voice mic-inside" type="button" id="btn-voice-motivo" onclick="startDictation('motivo', this)">
             <span class="voice-icon">🎙</span>
-            <span>Usar voz</span>
+            <span>Grabar</span>
           </button>
         </div>
 
@@ -761,23 +819,20 @@
           <label><input type="checkbox" id="ante-hta" /> Hipertensión</label>
           <label><input type="checkbox" id="ante-emb" /> Embarazo</label>
           <label><input type="checkbox" id="ante-epoc" /> EPOC</label>
-          <label><input type="checkbox" id="ante-otro" /> Otro</label>
         </div>
 
         <!-- 5. EXPLORACIÓN (TEXTO + VOZ) -->
-        <h3>5. Observaciones / exploración física</h3>
-        <div class="voice-wrapper">
-          <div style="flex:1;">
-            <label for="exploracion">Exploración física y observaciones</label>
-            <textarea id="exploracion" placeholder="Ej. TA controlada, orientado, marcha estable, signos de deshidratación, etc."></textarea>
-          </div>
-          <button class="btn-voice" type="button" id="btn-voice-expl" onclick="startDictation('exploracion', this)">
+        <h3>5. Observaciones</h3>
+        <label for="exploracion"> Auxiliares de diagnostico, diagnostico(s),tratamientos, pronósticos</label>
+        <div class="textarea-wrapper">
+          <textarea id="exploracion" placeholder=></textarea>
+          <button class="btn-voice mic-inside" type="button" id="btn-voice-expl" onclick="startDictation('exploracion', this)">
             <span class="voice-icon">🎙</span>
-            <span>Usar voz</span>
+            <span>Grabar</span>
           </button>
         </div>
 
-        <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.75rem;">
+        <div style="display:flex; flex-wrap:wrap; gap:0.20rem; margin-top:0.75rem;">
           <button class="btn" type="submit">Guardar nota</button>
           <button class="btn btn-secondary" type="button" onclick="fromFormBack()">Cancelar</button>
         </div>
@@ -906,6 +961,29 @@
     </button>
   </nav>
 
+  <!-- MODAL SENSADO AUTOMÁTICO -->
+  <div id="sensado-modal" class="modal-backdrop" style="display:none;">
+    <div class="modal-card">
+      <h3>Registro por sensado automático</h3>
+      <p>Simulación de captura en tiempo real de los signos vitales.</p>
+      <ul class="checklist">
+        <li><input type="checkbox" id="chk-ta"> Tensión arterial</li>
+        <li><input type="checkbox" id="chk-fc"> Frecuencia cardiaca</li>
+        <li><input type="checkbox" id="chk-fr"> Frecuencia respiratoria</li>
+        <li><input type="checkbox" id="chk-temp"> Temperatura</li>
+        <li><input type="checkbox" id="chk-glucosa"> Glucemia</li>
+        <li><input type="checkbox" id="chk-spo2"> Saturación O₂</li>
+      </ul>
+
+      <button type="button" class="btn btn-sm" onclick="confirmarSensado()">✅ Guardar datos</button>
+      <button type="button" class="btn btn-sm btn-secondary" onclick="cerrarSensado()">Cerrar</button>
+
+      <p id="sensado-msg" class="footer-note" style="display:none;margin-top:0.6rem;color:var(--success);">
+        Datos de sensado guardados correctamente.
+      </p>
+    </div>
+  </div>
+
   <script>
     let visits = [];
     let currentRole = null;
@@ -921,10 +999,26 @@
       return new Date().toISOString().slice(0, 10);
     }
 
+    // NUEVA LÓGICA DE RIESGO
     function computeRisk(glucosa, tas) {
       const g = Number(glucosa);
       const s = Number(tas);
-      if ((g && g > 180) || (s && s > 140)) return "Alerta";
+
+      // Glucosa:
+      // Normal aprox: 70–125 mg/dL
+      // Riesgo / alterado: ≥126 mg/dL
+      let riesgoGlucosa = "Normal";
+      if (g && g >= 126) riesgoGlucosa = "Alerta";
+
+      // TA sistólica:
+      // Normal aprox: ≤130 mmHg
+      // Riesgo: >130 mmHg
+      let riesgoTA = "Normal";
+      if (s && s > 130) riesgoTA = "Alerta";
+
+      if (riesgoGlucosa === "Alerta" || riesgoTA === "Alerta") {
+        return "Alerta";
+      }
       return "Normal";
     }
 
@@ -990,19 +1084,11 @@
     function enterAs(role) {
       currentRole = role;
       showBottomNav();
-      if (role === "enfermero") {
-        goTab("visitar");
-      } else {
-        goTab("visitar");
-      }
+      goTab("visitar");
     }
 
     function fromFormBack() {
-      if (currentRole === "medico") {
-        goTab("visitar");
-      } else {
-        goTab("visitar");
-      }
+      goTab("visitar");
     }
 
     function backFromDetail() {
@@ -1198,6 +1284,8 @@
       const temp = document.getElementById("temp").value;
       const glucosa = document.getElementById("glucosa").value;
       const spo2 = document.getElementById("spo2").value;
+      const glasgow = document.getElementById("glasgow").value;
+      const grupoRiesgo = document.getElementById("grupo-riesgo").value;
 
       const motivo = document.getElementById("motivo").value.trim();
       const exploracion = document.getElementById("exploracion").value.trim();
@@ -1218,7 +1306,7 @@
         folio,
         tipoVisita,
         patient: { name: nombre, age: edad, sex: sexo, curp, location: localidad },
-        vitals: { tas, tad, fc, fr, temp, glucose: glucosa, spo2 },
+        vitals: { tas, tad, fc, fr, temp, glucose: glucosa, spo2, glasgow, grupoRiesgo },
         motivo,
         exploracion,
         antecedentes,
@@ -1230,22 +1318,81 @@
       goTab("visitar");
     });
 
-    function simularSensor() {
-      const modo = document.querySelector("input[name='modo-sensor']:checked").value;
-      if (modo !== "sensor") {
-        alert("Selecciona 'Usar sensor en tiempo real' para simular la lectura.");
-        return;
-      }
-
-      document.getElementById("tas").value = 130 + Math.round(Math.random() * 15);
-      document.getElementById("tad").value = 80 + Math.round(Math.random() * 10);
-      document.getElementById("fc").value = 70 + Math.round(Math.random() * 10);
-      document.getElementById("fr").value = 16 + Math.round(Math.random() * 4);
-      document.getElementById("temp").value = (36.5 + Math.random()).toFixed(1);
-      document.getElementById("glucosa").value = 100 + Math.round(Math.random() * 80);
-      document.getElementById("spo2").value = 94 + Math.round(Math.random() * 5);
+    /* --- SIGNOS VITALES: MODOS --- */
+    function mostrarManual() {
+      const block = document.getElementById("vitals-manual");
+      if (block) block.style.display = "grid";
     }
 
+    function abrirSensado() {
+      const modal = document.getElementById("sensado-modal");
+      if (!modal) return;
+
+      // reset checklist y mensaje
+      modal.querySelectorAll("input[type='checkbox']").forEach(c => c.checked = false);
+      document.getElementById("sensado-msg").style.display = "none";
+
+      // simular lecturas antes de mostrar
+      simularSensor();
+
+      modal.style.display = "flex";
+
+      // Animación: palomear uno por uno
+      const checks = Array.from(modal.querySelectorAll("input[type='checkbox']"));
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < checks.length) {
+          checks[i].checked = true;
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 500);
+    }
+
+    function cerrarSensado() {
+      const modal = document.getElementById("sensado-modal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function confirmarSensado() {
+      const msg = document.getElementById("sensado-msg");
+      msg.style.display = "block";
+      setTimeout(cerrarSensado, 1200);
+    }
+
+    // 🔴 NUEVA SIMULACIÓN DE SENSOR (normales vs riesgo)
+    function simularSensor() {
+      // 60% lecturas normales, 40% lecturas en riesgo
+      const esRiesgo = Math.random() < 0.4;
+
+      if (!esRiesgo) {
+        // Rangos considerados normales / controlados
+        document.getElementById("tas").value = 110 + Math.round(Math.random() * 15); // 110–125
+        document.getElementById("tad").value = 70 + Math.round(Math.random() * 10);  // 70–80
+        document.getElementById("fc").value  = 65 + Math.round(Math.random() * 10);  // 65–75
+        document.getElementById("fr").value  = 14 + Math.round(Math.random() * 4);   // 14–18
+        document.getElementById("temp").value = (36.4 + Math.random()*0.5).toFixed(1); // 36.4–36.9
+        document.getElementById("glucosa").value = 85 + Math.round(Math.random() * 35); // 85–120
+        document.getElementById("spo2").value = 96 + Math.round(Math.random() * 3); // 96–99
+      } else {
+        // Rangos en zona de alerta
+        document.getElementById("tas").value = 135 + Math.round(Math.random() * 25); // 135–160
+        document.getElementById("tad").value = 85 + Math.round(Math.random() * 15);  // 85–100
+        document.getElementById("fc").value  = 80 + Math.round(Math.random() * 20);  // 80–100
+        document.getElementById("fr").value  = 20 + Math.round(Math.random() * 6);   // 20–26
+        document.getElementById("temp").value = (37.5 + Math.random()*1).toFixed(1); // 37.5–38.5
+        document.getElementById("glucosa").value = 130 + Math.round(Math.random() * 80); // 130–210
+        document.getElementById("spo2").value = 88 + Math.round(Math.random() * 8);  // 88–96
+      }
+
+      const glasgowInput = document.getElementById("glasgow");
+      if (glasgowInput) glasgowInput.value = esRiesgo ? 13 : 15;
+      const grupoSelect = document.getElementById("grupo-riesgo");
+      if (grupoSelect) grupoSelect.value = esRiesgo ? "III" : "I";
+    }
+
+    /* --- VOZ --- */
     function initRecognition() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
@@ -1260,7 +1407,7 @@
     }
 
     function startDictation(targetId, buttonEl) {
-      if (recognizing) {
+      if (recognizing && recognition) {
         recognition.stop();
         return;
       }
@@ -1301,7 +1448,7 @@
       const label = document.getElementById("sync-status");
       label.textContent = "Sincronizando notas…";
       setTimeout(() => {
-        label.textContent = "Sincronización completada (simulada).";
+        label.textContent = "Sincronización completada .";
       }, 1200);
     }
 
@@ -1318,3 +1465,4 @@
   </script>
 </body>
 </html>
+
